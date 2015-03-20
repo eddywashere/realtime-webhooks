@@ -1,78 +1,82 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="app">
 <head>
     <title>Socket.io with JWTs</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/examples/jumbotron-narrow/jumbotron-narrow.css">
 </head>
-<body>
-    <div class="container">
-      <div class="row">
-        <div class="form-group">
-          <label for="url">Login</label>
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" value="demo">
-          <input type="password" class="form-control" value="demo">
-        </div>
-        <div class="form-group">
-          <input id="login" class="btn btn-primary" type="submit" value="login">
-        </div>
+<body ng-controller="MainCtrl">
+  <div class="container-fluid">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="https://mailgun.com/app/webhooks">Configure Mailgun Webhooks</a></li>
+          </ul>
+        </nav>
+        <h3 class="text-muted">Gunrack</h3>
       </div>
-    </div>
-    <hr>
 
-    <div>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repudiandae ea facere nam ullam. Molestias earum provident, odio dignissimos deleniti mollitia tempore sed rerum distinctio ullam perferendis. Vero, aspernatur accusamus natus?</p>
-        <button id="ping">Send Socket.io Ping</button>
+      <div class="alert alert-info" role="alert">
+        <h4>How to set up Gunrack</h4>
+        <ol>
+          <li>Configure your Mailgun <a href="">webhooks here</a></li>
+          <li>Enter your Gunrack url <code>http://xxxxxxxx.herokuapp.com/track/1234</code> for each of the events you want to track</li>
+          <li>Watch your events roll in</li>
+        </ol>
+      </div>
+
+      CHART GOES HERE
+
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Date/Time</th>
+              <th>Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="event in events">
+              <th scope="row">03/20/15 11:18 AM</th>
+              <td>{{event}}</td>
+            </tr>
+            <tr>
+              <th scope="row">03/20/15 11:18 AM</th>
+              <td>Delivered: postmaster@send.leemunroe.com → lee@leemunroe.com 'This is a test email'</td>
+            </tr>
+            <tr>
+              <th scope="row">03/20/15 11:18 AM</th>
+              <td>Accepted: postmaster@send.leemunroe.com → lee@leemunroe.com 'This is a test email'</td>
+            </tr>
+            <tr>
+              <th scope="row">03/20/15 11:18 AM</th>
+              <td>Delivered: postmaster@send.leemunroe.com → lee@leemunroe.com 'This is a test email'</td>
+            </tr>
+            <tr>
+              <th scope="row">03/20/15 11:18 AM</th>
+              <td>Accepted: postmaster@send.leemunroe.com → lee@leemunroe.com 'This is a test email'</td>
+            </tr>
+            <tr>
+              <th scope="row">03/20/15 11:18 AM</th>
+              <td>Delivered: postmaster@send.leemunroe.com → lee@leemunroe.com 'This is a test email'</td>
+            </tr>
+            <tr>
+              <th scope="row">03/20/15 11:18 AM</th>
+              <td>Accepted: postmaster@send.leemunroe.com → lee@leemunroe.com 'This is a test email'</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <footer class="footer">
+        <p>An Eddy &amp; Lee Production</p>
+      </footer>
+
     </div>
 
-    <script src="//code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.2/angular.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-
-    <script>
-        var token, socket;
-
-        function connect () {
-          socket = io.connect(token ? ('?token=' + token) : '', {
-            'forceNew': true
-          });
-
-          socket.on('pong', function () {
-            console.log('- pong');
-          }).on('time', function (data) {
-            console.log('- broadcast: ' + data);
-          }).on('authenticated', function () {
-            console.log('- authenticated');
-          }).on('disconnect', function () {
-            console.log('- disconnected');
-          }).on('error', function (reason){
-            console.error('Unable to connect Socket.IO', reason);
-          });
-        }
-
-        connect(); //connect now, it will drop
-
-        $('#ping').on('click', function () {
-            console.log('- ping');
-            socket.emit('ping');
-        });
-
-        $('#login').click(function (e) {
-            e.preventDefault();
-            var username = $('#username').val();
-            var password = $('#password').val();
-            $.ajax({
-                type: 'POST',
-                data: {
-                    username: username,
-                    password: password
-                },
-                url: '/login'
-            }).done(function (result) {
-                token = result.token;
-                connect();
-            });
-        });
-    </script>
+    <script src="/scripts/socket.min.js"></script>
+    <script src="/scripts/scripts.js"></script>
 </body>
 </html>

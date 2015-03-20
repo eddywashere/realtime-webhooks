@@ -10,6 +10,8 @@ var jwt = require('jsonwebtoken');
 var jwt_secret = 'foo bar big secret';
 
 var app = express();
+var server = http.createServer(app);
+var sio = socketIo.listen(server);
 
 var config = {
   username: process.env.BASIC_USERNAME || 'username',
@@ -36,17 +38,19 @@ app.post('/login', function (req, res) {
   res.json({token: token});
 });
 
-var server = http.createServer(app);
-var sio = socketIo.listen(server);
+app.post('/webhooks', function(req, res){
+  sio.sockets.emit('webhooks', req.body);
+  res.send(200);
+});
 
-sio.use(socketio_jwt.authorize({
-  secret: jwt_secret,
-  handshake: true
-}));
+// sio.use(socketio_jwt.authorize({
+//   secret: jwt_secret,
+//   handshake: true
+// }));
 
 sio.sockets
   .on('connection', function (socket) {
-    console.log(socket.decoded_token.email, 'connected');
+    // console.log(socket.decoded_token.email, 'connected');
     socket.on('ping', function (m) {
       socket.emit('pong', m);
     });
