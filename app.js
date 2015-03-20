@@ -1,6 +1,7 @@
 var express = require('express');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 var http = require('http');
+var basicAuth = require('basic-auth-connect');
 
 var socketIo = require('socket.io');
 var socketio_jwt = require('socketio-jwt');
@@ -9,6 +10,15 @@ var jwt = require('jsonwebtoken');
 var jwt_secret = 'foo bar big secret';
 
 var app = express();
+
+var config = {
+  username: process.env.BASIC_USERNAME || 'username',
+  password: process.env.BASIC_PASSWORD || 'password'
+};
+
+app.use(basicAuth(function(user, pass){
+  return 'username' == user && 'password' == pass;
+}));
 
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/app'));
