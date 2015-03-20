@@ -17,7 +17,7 @@ var config = {
 };
 
 app.use(basicAuth(function(user, pass){
-  return 'username' == user && 'password' == pass;
+  return config.username == user && config.password == pass;
 }));
 
 app.use(bodyParser.json());
